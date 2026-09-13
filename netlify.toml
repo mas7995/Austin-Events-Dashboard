@@ -1,0 +1,17 @@
+# Netlify config. This is a static site with no build step.
+# The whole repo root is published as-is.
+
+[build]
+  publish = "."
+  command = ""
+
+# Long-cache the static assets and data (they're versioned by edits).
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/data/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"

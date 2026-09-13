@@ -1,0 +1,10 @@
+# macOS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Node (only if you later add tooling)
+node_modules/
+npm-debug.log*
+.netlify/
