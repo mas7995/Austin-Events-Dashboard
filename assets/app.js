@@ -131,6 +131,7 @@
           '<option value="date">Soonest first</option>' +
           '<option value="featured">Marquee first</option>' +
         "</select>" +
+        '<button class="toggle" id="upcoming" type="button" aria-pressed="false">Upcoming only</button>' +
       "</div>" +
       '<div class="chips" id="chips" role="group" aria-label="Filter by category">' + chipsHTML.join("") + "</div>" +
     "</div></div>" +
@@ -156,7 +157,7 @@
   root.innerHTML = shell;
 
   /* ---- state + nodes ------------------------------------------------ */
-  var state = { search: "", category: "All", month: "all", sort: "date" };
+  var state = { search: "", category: "All", month: "all", sort: "date", upcoming: false };
   var grid = document.getElementById("grid");
   var countEl = document.getElementById("count");
   var searchEl = document.getElementById("search");
@@ -173,6 +174,8 @@
       ? '<span class="pill pill--tbc">typical dates</span>' : "";
     var star = ev.featured
       ? '<span class="star">' + I.star + " Marquee</span>" : "";
+    var src = ev.source
+      ? '<span class="pill pill--source">via ' + esc(ev.source) + "</span>" : "";
 
     return '<article class="card ' + (ev.featured ? "card--featured" : "") +
         '" style="--cat:var(' + catVar + ')">' +
@@ -183,7 +186,7 @@
       "</div>" +
       '<div class="card__body">' +
         '<div class="card__toprow">' +
-          '<span class="tag">' + esc(ev.category) + "</span>" + star +
+          '<span class="tag">' + esc(ev.category) + "</span>" + star + src +
         "</div>" +
         "<h3>" + esc(ev.title) + "</h3>" +
         '<div class="card__when"><span>' + esc(ev.dateDisplay) + "</span>" + tbc + "</div>" +
@@ -209,6 +212,10 @@
       if (state.month !== "all") {
         var mm = parseInt(state.month, 10);
         if (mm < startMonth(ev) || mm > endMonth(ev)) return false;
+      }
+      if (state.upcoming) {
+        var today = new Date(); today.setHours(0, 0, 0, 0);
+        if (d(ev.end || ev.start) < today) return false;
       }
       if (q) {
         var hay = (ev.title + " " + ev.venue + " " + ev.area + " " +
@@ -253,7 +260,7 @@
   }
 
   function clearFilters() {
-    state = { search: "", category: "All", month: "all", sort: state.sort };
+    state = { search: "", category: "All", month: "all", sort: state.sort, upcoming: state.upcoming };
     searchEl.value = "";
     monthEl.value = "all";
     setActiveChip("All");
@@ -277,6 +284,13 @@
     if (!btn) return;
     state.category = btn.getAttribute("data-cat");
     setActiveChip(state.category);
+    render();
+  });
+
+  var upcomingEl = document.getElementById("upcoming");
+  upcomingEl.addEventListener("click", function () {
+    state.upcoming = !state.upcoming;
+    upcomingEl.setAttribute("aria-pressed", state.upcoming ? "true" : "false");
     render();
   });
 

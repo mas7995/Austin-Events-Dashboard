@@ -62,10 +62,11 @@ looks like this:
   dateStatus: "confirmed",            // "confirmed" or "typical" (see below)
   venue: "Zilker Park",
   area: "Zilker",                     // neighborhood / part of town
-  price: "$$$",                       // "Free" | "$" | "$$" | "$$$" | "Badge/Pass" | "Varies"
+  price: "$$$",                       // "Free" | "$" | "$$" | "$$$" | "Badge/Pass" | "Varies" | "RSVP"
   featured: true,                     // true adds the "Marquee" badge + accent
   description: "One line about the event.",
-  url: "https://www.aclfestival.com/" // official site
+  url: "https://www.aclfestival.com/", // official site
+  source: "Luma"                      // optional; adds a small "via …" provenance chip
 }
 ```
 
@@ -91,3 +92,31 @@ whose exact 2026 dates may not be published yet.
 
 This is a planning aid, not a ticketing source. Prices are rough tiers, not
 quotes.
+
+## Where the events come from
+
+Two kinds of entries live in `data/events.js`:
+
+- **Curated anchors and festivals**: the marquee weekends and recurring
+  annual festivals (SXSW, ACL, F1, LEVITATION, ATX TV Festival, and so on).
+- **Newsletter pulls**: individual events lifted from Austin email
+  newsletters. These carry a `source` field and show a small "via …" chip on
+  the card. Current sources:
+  - **Luma**: the weekly "What's happening in Austin" digest.
+  - **ABR**: The Austin Business Review, a weekly founder/business roundup.
+
+Newsletters look about a week ahead, so the individual pulls are near-term.
+The **Upcoming only** toggle in the filter bar hides anything already past, so
+the board stays useful as the year moves.
+
+## Keeping it updated
+
+Today this is a snapshot: events refresh whenever the data file is edited.
+Two ways to keep it current:
+
+1. **Manual**: edit `data/events.js` and redeploy. If you connected the repo
+   to Netlify, a push auto-deploys.
+2. **Automated**: a scheduled job can re-read the source newsletters on a
+   cadence (for example, every Monday), extract new events, update
+   `data/events.js`, and push, which triggers a fresh Netlify deploy. That is
+   a separate setup step, not wired in yet.
