@@ -131,7 +131,7 @@
           '<option value="date">Soonest first</option>' +
           '<option value="featured">Marquee first</option>' +
         "</select>" +
-        '<button class="toggle" id="upcoming" type="button" aria-pressed="false">Upcoming only</button>' +
+        '<button class="toggle" id="upcoming" type="button" aria-pressed="true">Upcoming only</button>' +
       "</div>" +
       '<div class="chips" id="chips" role="group" aria-label="Filter by category">' + chipsHTML.join("") + "</div>" +
     "</div></div>" +
@@ -157,7 +157,7 @@
   root.innerHTML = shell;
 
   /* ---- state + nodes ------------------------------------------------ */
-  var state = { search: "", category: "All", month: "all", sort: "date", upcoming: false };
+  var state = { search: "", category: "All", month: "all", sort: "date", upcoming: true };
   var grid = document.getElementById("grid");
   var countEl = document.getElementById("count");
   var searchEl = document.getElementById("search");
